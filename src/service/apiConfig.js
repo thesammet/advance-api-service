@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { storage } from '../config/storage';
+import { APP_DEV_MODE } from "@env"
 
 const api = axios.create({
-    baseURL: "https://jsonplaceholder.typicode.com",
+    baseURL: APP_DEV_MODE,
     json: true,
     timeout: 30000,
     withCredentials: true,

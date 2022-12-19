@@ -13,6 +13,7 @@
     "axios": "^1.2.1",
     "react": "18.1.0",
     "react-native": "0.70.6",
+    "react-native-dotenv": "^3.4.6",
     "react-native-mmkv": "^2.5.1"
   },
   "devDependencies": {
