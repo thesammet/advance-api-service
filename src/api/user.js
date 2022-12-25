@@ -1,8 +1,8 @@
-import { get } from '../service/apiConfig'
+import APIService from '../service/apiConfig';
 
 export default async function getUsers() {
     try {
-        const users = await get('/users');
+        const users = await APIService.get('/users');
         console.log(users)
         return users
     } catch (error) {
