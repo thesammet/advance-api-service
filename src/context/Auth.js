@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
     };
 
     const removeToken = async () => {
-        console.log("ab")
         setToken(null);
         try {
             storage.delete('token');

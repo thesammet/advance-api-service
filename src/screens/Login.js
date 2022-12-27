@@ -1,15 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native'
 import { AuthContext } from '../context/Auth';
+import { TOKEN } from "@env"
 
 export default Login = () => {
-    const { addToken } = useContext(AuthContext);
+    const { addToken, removeToken, token } = useContext(AuthContext);
     const login = () => {
-        //TODO: login with test user
+        //TODO: Login with a test user
+        addToken(TOKEN)
     }
     const register = () => {
-        //TODO: register with test user
+        //TODO: Register a test user
+        addToken(TOKEN)
     }
+    useEffect(() => {
+        token && removeToken()
+    })
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <TouchableOpacity

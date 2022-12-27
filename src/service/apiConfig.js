@@ -1,25 +1,22 @@
 import axios from 'axios'
 import { storage } from '../config/storage';
-import { APP_PROD_MODE } from "@env"
+import { APP_PROD_MODE, APP_DEV_MODE } from "@env"
+import { navigationPush } from '../navigation/RootNavigation';
 
 const APIService = axios.create({
     baseURL: APP_PROD_MODE,
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    },
+    headers
 });
 
 APIService.interceptors.request.use(
     config => {
         const accessToken = storage.getString('token');
         if (accessToken) {
-            config.headers.common = { Authorization: `Bearer ${accessToken}` };
+            config.headers = { Authorization: `Bearer ${accessToken}` };
         }
         return config;
     },
     error => {
-        console.log("interceptor config error: " + error)
         Promise.reject(error.response || error.message);
     }
 );
@@ -29,15 +26,32 @@ APIService.interceptors.response.use(
         return response;
     },
     async function (error) {
-        let originalRequest = error.config;
-        if (error.response.status === 401 &&
-            !originalRequest._retry) {
-            originalRequest._retry = true;
-            //TODO: delete token from auth context & navigate register or error page
-            return console.log("401 status")
+        if (error.response.status === 401) {
+            return navigationPush('Auth');
+        }
+        if (error.response.status === 404) {
+            //TODO 404
+        }
+        if (error.response.status === 400) {
+            //TODO 400
         }
         return Promise.reject(error.response || error.message);
     }
 );
+
+const headers = () => {
+    let props = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    };
+    let token = storage.getString(`token`)
+
+    if (token) {
+        props.Authorization = `Bearer ${token}`;
+    }
+    return {
+        headers: props
+    }
+}
 
 export default APIService;
