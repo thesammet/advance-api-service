@@ -1,5 +1,12 @@
 import React, { useEffect, useContext, useState } from 'react'
-import { View, StyleSheet, SafeAreaView, Text, TouchableOpacity, FlatList } from 'react-native'
+import {
+    View,
+    StyleSheet,
+    SafeAreaView,
+    Text,
+    TouchableOpacity,
+    FlatList
+} from 'react-native'
 import { AuthContext } from '../context/Auth';
 import APIService from '../service/apiConfig';
 
@@ -11,10 +18,19 @@ const styles = StyleSheet.create({
     mealBox: {
         alignSelf: 'center',
         marginVertical: 8
+    },
+    postPageButton: {
+        backgroundColor: 'yellow',
+        marginVertical: 8,
+        padding: 8,
+        alignSelf: 'center'
+    },
+    centerAlign: {
+        alignSelf: 'center'
     }
 })
 
-export default function Home() {
+export default function Home({ navigation }) {
     const { removeToken } = useContext(AuthContext);
     const [data, setData] = useState([])
 
@@ -25,8 +41,12 @@ export default function Home() {
 
     async function getFood() {
         try {
-            const response = await APIService.get('/food');
-            return setData(response.data.data)
+            const response = await APIService.post(
+                '/register',
+                JSON.stringify({
+                    "data": ""
+                }))
+            return setData(response.data)
         } catch (error) {
             //TODO: Toast message
             return { error: true, error }
@@ -52,14 +72,22 @@ export default function Home() {
             <FlatList
                 data={data}
                 renderItem={renderItem}
-                keyExtractor={(item) => item._id}
+                keyExtractor={(item) => item.meal._id}
             />
-            <TouchableOpacity
-                onPress={removeTokenMethod}
-                activeOpacity={.8}
-                style={{ alignSelf: 'center' }}>
-                <Text style={{ fontSize: 32 }}>Remove Token</Text>
-            </TouchableOpacity>
+            <View>
+                <TouchableOpacity
+                    onPress={navigation.navigate('PostPage')}
+                    activeOpacity={.8}
+                    style={styles.postPageButton}>
+                    <Text style={{ fontSize: 32 }}>Post Page</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={removeTokenMethod}
+                    activeOpacity={.8}
+                    style={styles.centerAlign}>
+                    <Text style={{ fontSize: 32 }}>Remove Token</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }

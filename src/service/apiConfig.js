@@ -23,7 +23,7 @@ APIService.interceptors.request.use(
 
 APIService.interceptors.response.use(
     response => {
-        return response;
+        return response.data;
     },
     async function (error) {
         if (error.response.status === 401) {
